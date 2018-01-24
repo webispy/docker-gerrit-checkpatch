@@ -27,10 +27,11 @@ RUN apt-get update && apt-get install -y \
 		&& apt-get clean \
 		&& rm -rf /var/lib/apt/lists/*
 
-# gerrit-check
+# gerrit-check (fix flake8 python version issue and add cppcheck option)
 RUN pip install --trusted-host pypi.python.org --upgrade pip \
 	&& pip install --trusted-host pypi.python.org gerrit-check \
 	&& sed -i 's/from flake8.engine/from flake8.api.legacy/' /usr/local/lib/python2.7/dist-packages/gerritcheck/check.py \
+	&& sed -i 's/"--quiet"/"--quiet", "--enable=all"/' /usr/local/lib/python2.7/dist-packages/gerritcheck/check.py \
 	&& touch /usr/local/lib/python2.7/dist-packages/gerritcheck/check.py
 
 # checkpatch

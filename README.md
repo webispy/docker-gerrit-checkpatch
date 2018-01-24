@@ -50,7 +50,9 @@ index 0000000..cdc0869
 +
 +       return 0;
 +}
+```
 
+```sh
 # checkpatch.pl - check the coding convention (linux kernel style)
 $ docker run --rm -v ~/gerrit-checkpatch:/src webispy/gerrit-checkpatch bash -c "cd /src; run_checkpatch.sh b7d399c" | json_pp
 {
@@ -69,7 +71,9 @@ $ docker run --rm -v ~/gerrit-checkpatch:/src webispy/gerrit-checkpatch bash -c 
       ]
    }
 }
+```
 
+```sh
 # cppcheck - static analysis
 $ docker run --rm -v ~/gerrit-checkpatch:/src webispy/gerrit-checkpatch bash -c "cd /src; run_cppcheck.sh b7d399c" | json_pp
 {
