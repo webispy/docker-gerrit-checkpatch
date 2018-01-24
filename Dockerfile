@@ -2,7 +2,7 @@
 FROM ubuntu:xenial
 LABEL maintainer="webispy@gmail.com" \
       version="0.1" \
-      description="gerrit-check docker"
+      description="checkpatch and cppcheck for gerrit message"
 
 ARG http_proxy
 ARG https_proxy
@@ -13,7 +13,6 @@ ENV http_proxy=$http_proxy \
     LC_ALL=en_US.UTF-8 \
     LANG=$LC_ALL
 
-# Modify apt repository to KR mirror
 RUN apt-get update && apt-get install -y \
 		ca-certificates language-pack-en \
 		cppcheck \
@@ -31,7 +30,8 @@ RUN apt-get update && apt-get install -y \
 # gerrit-check
 RUN pip install --trusted-host pypi.python.org --upgrade pip \
 	&& pip install --trusted-host pypi.python.org gerrit-check \
-	&& sed -i 's/from flake8.engine/from flake8.api.legacy/' /usr/local/lib/python2.7/dist-packages/gerritcheck/check.py
+	&& sed -i 's/from flake8.engine/from flake8.api.legacy/' /usr/local/lib/python2.7/dist-packages/gerritcheck/check.py \
+	&& touch /usr/local/lib/python2.7/dist-packages/gerritcheck/check.py
 
 # checkpatch
 RUN mkdir /usr/share/codespell \
@@ -42,5 +42,6 @@ RUN mkdir /usr/share/codespell \
 	&& chmod +x /usr/bin/checkpatch-to-gerrit-json.py
 
 COPY run_checkpatch.sh /usr/bin/
+COPY run_cppcheck.sh /usr/bin/
 
 CMD ["/bin/bash"]
