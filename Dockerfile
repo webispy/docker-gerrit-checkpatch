@@ -4,12 +4,7 @@ LABEL maintainer="webispy@gmail.com" \
       version="0.1" \
       description="checkpatch and cppcheck for gerrit message"
 
-ARG http_proxy
-ARG https_proxy
-
-ENV http_proxy=$http_proxy \
-    https_proxy=$https_proxy \
-    DEBIAN_FRONTEND=noninteractive \
+ENV DEBIAN_FRONTEND=noninteractive \
     LC_ALL=en_US.UTF-8 \
     LANG=$LC_ALL
 
@@ -31,7 +26,7 @@ RUN apt-get update && apt-get install -y \
 # - fix flake8 python version issue
 # - add cppcheck option (--enable=all, --quiet)
 # - remove Code-Review: -1
-RUN pip install --trusted-host pypi.python.org --upgrade pip \
+RUN pip install --trusted-host pypi.python.org --upgrade pip==9.0.3 \
 	&& pip install --trusted-host pypi.python.org gerrit-check \
 	&& sed -i 's/from flake8.engine/from flake8.api.legacy/' /usr/local/lib/python2.7/dist-packages/gerritcheck/check.py \
 	&& sed -i 's/"--quiet"/"--quiet", "--enable=all"/' /usr/local/lib/python2.7/dist-packages/gerritcheck/check.py \
@@ -40,7 +35,7 @@ RUN pip install --trusted-host pypi.python.org --upgrade pip \
 
 # checkpatch
 RUN mkdir /usr/share/codespell \
-	&& wget --no-check-certificate https://raw.githubusercontent.com/torvalds/linux/master/scripts/checkpatch.pl -P /usr/bin/ \
+	&& wget --no-check-certificate https://raw.githubusercontent.com/01org/zephyr/master/scripts/checkpatch.pl -P /usr/bin/ \
 	&& wget --no-check-certificate https://raw.githubusercontent.com/torvalds/linux/master/scripts/spelling.txt -P /usr/bin/ \
 	&& wget --no-check-certificate https://raw.githubusercontent.com/nfs-ganesha/ci-tests/master/checkpatch/checkpatch-to-gerrit-json.py -P /usr/bin/ \
 	&& chmod +x /usr/bin/checkpatch.pl \
