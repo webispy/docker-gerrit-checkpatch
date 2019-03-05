@@ -10,10 +10,10 @@
 $ docker pull webispy/gerrit-checkpatch
 
 # checkpatch
-$ docker run --rm -v {your-git-repository}:/src webispy/gerrit-checkpatch bash -c "cd /src; run_checkpatch.sh {commit-id}"
+$ docker run --rm -w /src -v {your-git-repository}:/src webispy/gerrit-checkpatch run_checkpatch.sh {commit-id}
 
 # cppcheck
-$ docker run --rm -v {your-git-repository}:/src webispy/gerrit-checkpatch bash -c "cd /src; run_cppcheck.sh {commit-id}"
+$ docker run --rm -w /src -v {your-git-repository}:/src webispy/gerrit-checkpatch run_cppcheck.sh {commit-id}
 ```
 
 ## Examples - commit for sample/main.c
@@ -54,7 +54,7 @@ index 0000000..cdc0869
 
 ```sh
 # checkpatch.pl - check the coding convention (linux kernel style)
-$ docker run --rm -v ~/gerrit-checkpatch:/src webispy/gerrit-checkpatch bash -c "cd /src; run_checkpatch.sh b7d399c" | json_pp
+$ docker run --rm -w /src -v ~/gerrit-checkpatch:/src webispy/gerrit-checkpatch run_checkpatch.sh b7d399c | json_pp
 {
    "message" : "Checkpatch total: 1 errors, 1 warnings, 12 lines checked",
    "comments" : {
@@ -75,7 +75,7 @@ $ docker run --rm -v ~/gerrit-checkpatch:/src webispy/gerrit-checkpatch bash -c 
 
 ```sh
 # cppcheck - static analysis
-$ docker run --rm -v ~/gerrit-checkpatch:/src webispy/gerrit-checkpatch bash -c "cd /src; run_cppcheck.sh b7d399c" | json_pp
+$ docker run --rm -w /src -v ~/gerrit-checkpatch:/src webispy/gerrit-checkpatch run_cppcheck.sh b7d399c | json_pp
 {
    "comments" : {
       "sample/main.c" : [
